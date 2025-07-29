@@ -1,6 +1,9 @@
-from django.shortcuts import render #here by default
+from django.shortcuts import render, redirect #here by default
 from django.views.generic import TemplateView
 from django.views import View
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+
 
 
 # Create your views here.
@@ -41,6 +44,7 @@ class Product:
         {"id":"3", "name":"Chromecast", "description":"Best Chromecast", "price": "$300,000"},
         {"id":"4", "name":"Glasses", "description":"Best Glasses", "price": "$700,000"}
     ]
+
 class ProductIndexView(View):
     template_name = 'products/index.html'
 
@@ -55,6 +59,13 @@ class ProductShowView(View):
     template_name = 'products/show.html'
 
     def get(self, request, id):
+        # Verificar si el ID es válido
+        try:
+            product = Product.products[int(id) - 1]
+        except (IndexError, ValueError):
+            # Si no es válido, redirigir a la vista 'home'
+            return HttpResponseRedirect(reverse('home'))
+
         viewData = {}
         product = Product.products[int(id)-1]
         viewData["title"] = product["name"] + " - Online Store"
