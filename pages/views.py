@@ -91,17 +91,19 @@ class ProductCreateView(View):
 
     def get(self, request):
         form = ProductForm()
-        viewData = {}
-        viewData["title"] = "Create product"
-        viewData["form"] = form
+        viewData = {
+            "title": "Create product",
+            "form": form
+        }
         return render(request, self.template_name, viewData)
     
     def post(self, request):
         form = ProductForm(request.POST)
         if form.is_valid():
-            return redirect('form')
+            return redirect('product_created')
         else:
-            viewData = {}
-            viewData["title"] = "Create product"
-            viewData["form"] = form
+            viewData = {
+                "title": "Create product",
+                "form": form
+            }
             return render(request, self.template_name, viewData)
