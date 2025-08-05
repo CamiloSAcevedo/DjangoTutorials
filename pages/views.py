@@ -76,8 +76,9 @@ class ProductShowView(View):
         return render(request, self.template_name, viewData)
 
 class ProductForm(forms.Form):
-    name = forms.CharField(required=True)
-    price = forms.FloatField(required=True)
+    class Meta:
+        model = Product
+        fields = ['name' , 'price']
     
     def clean_price(self):
         price = self.cleaned_data.get('price')
@@ -106,6 +107,7 @@ class ProductCreateView(View):
                 "form": form
             }
             return render(request, self.template_name, viewData)
+
         
 class ProductListView(ListView):
     model = Product
